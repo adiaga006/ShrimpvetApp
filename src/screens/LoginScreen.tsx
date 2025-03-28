@@ -19,6 +19,7 @@ import { COLORS, FONT_SIZE, SPACING } from '../constants/theme';
 import CustomButton from '../components/CustomButton';
 import { MaterialIcons, FontAwesome5, MaterialCommunityIcons, Ionicons } from '@expo/vector-icons';
 import { login, testConnection } from '../services/api';
+import axios from 'axios';
 
 const { width, height } = Dimensions.get('window');
 
@@ -210,7 +211,8 @@ const LoginScreen: React.FC = ({ navigation }: any) => {
             <View style={styles.registerContainer}>
               <Text style={styles.registerText}>Don't have an account? </Text>
               <TouchableOpacity>
-                <Text style={styles.registerLink}>Register Now</Text>
+                <Text style={styles.registerLink}
+                onPress={()=>navigation.navigate('Register')}>Register Now</Text>
               </TouchableOpacity>
             </View>
             

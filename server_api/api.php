@@ -53,26 +53,81 @@ if ($action === 'login') {
         ]);
         exit;
     }
-    
-    // For testing, just return success if username is admin
-    if ($username === 'admin' && $password === 'admin') {
-        echo json_encode([
-            'success' => true,
-            'message' => 'Login successful',
-            'user' => [
-                'username' => $username,
-                'email' => 'admin@gmail.com',
-                'fullname' => 'Administrator',
-                'role' => 1
-            ]
-        ]);
-    } else {
+    try{
+        // Query to get password by username
+        $stmt = $pdo->prepare("SELECT * FROM user_infor WHERE username = :username");
+        $stmt->execute(['username' => $username]);
+        $user = $stmt->fetch(PDO::FETCH_ASSOC);
+        // Check if user exists
+        if (!$user) {
+            echo json_encode([
+                'success' => false,
+                'message' => 'User not found'
+            ]);
+            exit;
+        }
+        // Check password directly, no encoding,decoding yet
+        if ($password === $user['password']) {
+            echo json_encode([
+                'success' => true,
+                'message' => 'Login successful',
+                'user' => [
+                    'username' => $username,
+                    'email' => $user['email'],
+                    'fullname' => $user['fullname'],
+                    'role' => $user['role']
+                ]
+            ]);
+        }
+        else {
+            echo json_encode([
+                'success' => false,
+                'message' => 'Invalid credentials'
+            ]);
+        }
+    } catch (PDOException $e) {
         echo json_encode([
             'success' => false,
-            'message' => 'Invalid credentials'
+            'message' => 'Error adding user: ' . $e->getMessage()
         ]);
     }
-} else {
+}elseif ($action === 'add_user') {
+    // Xử lý thêm người dùng mới
+    $username = $json_data['username'] ?? $_POST['username'] ?? '';
+    $password = $json_data['password'] ?? $_POST['password'] ?? '';
+    $email = $json_data['email'] ?? $_POST['email'] ?? '';
+    $fullname = $json_data['fullname'] ?? $_POST['fullname'] ?? '';
+    $role = $json_data['role'] ?? $_POST['role'] ?? 2; // Mặc định là user
+
+    if (!$username || !$password || !$email || !$fullname) {
+        echo json_encode([
+            'success' => false,
+            'message' => 'All fields are required'
+        ]);
+        exit;
+    }
+
+    try {
+        $stmt = $pdo->prepare("INSERT INTO user_infor (username, password, email, fullname, role) VALUES (:username, :password, :email, :fullname, :role)");
+        $stmt->execute([
+            'username' => $username,
+            'password' => $password, // Lưu ý: Cần mã hóa mật khẩu trước khi lưu
+            'email' => $email,
+            'fullname' => $fullname,
+            'role' => $role
+        ]);
+
+        echo json_encode([
+            'success' => true,
+            'message' => 'User added successfully'
+        ]);
+    } catch (PDOException $e) {
+        echo json_encode([
+            'success' => false,
+            'message' => 'Error adding user: ' . $e->getMessage()
+        ]);
+    }
+ } else {
     // Default response
     echo json_encode([
         'success' => true,

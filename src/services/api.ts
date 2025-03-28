@@ -77,6 +77,28 @@ export const getUsers = async () => {
   }
 };
 
+//Register new user
+export const addUser=async(userData:{
+  username:string,
+  email:string,
+  fullname:string,
+  password:string,
+  role?:number
+})=>{
+  const finalUserData={...userData,role:userData.role ?? 2};
+  try{
+    const response=await axios.post(`${API_URL}?action=add_user`,finalUserData,{
+      headers:{
+        'Content-Type':'application/json'
+      }
+    });
+    return response.data;
+  }catch(error){
+    console.error('Add user error:',error);
+    throw error;
+  }
+};
+
 // Get user by ID
 export const getUserById = async (id: number) => {
   try {

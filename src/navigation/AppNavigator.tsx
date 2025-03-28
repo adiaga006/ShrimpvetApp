@@ -3,11 +3,13 @@ import { NavigationContainer } from '@react-navigation/native';
 import { createNativeStackNavigator } from '@react-navigation/native-stack';
 import HomeScreen from '../screens/HomeScreen';
 import LoginScreen from '../screens/LoginScreen';
+import RegisterScreen from 'screens/RegisterScreen';
 import ApiTestScreen from '../screens/ApiTestScreen';
 
 // Định nghĩa các kiểu dữ liệu cho các tham số route
 export type RootStackParamList = {
   Login: undefined;
+  Register: undefined;
   Home: undefined;
   ApiTest: undefined;
   // Thêm các màn hình khác ở đây khi cần
@@ -57,6 +59,10 @@ const AppNavigator: React.FC = () => {
               fontWeight: 'bold',
             },
           }} 
+        />
+        <Stack.Screen 
+          name="Register" 
+          component={RegisterScreen} 
         />
       </Stack.Navigator>
     </NavigationContainer>
