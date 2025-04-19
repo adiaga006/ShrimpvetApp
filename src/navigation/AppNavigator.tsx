@@ -5,6 +5,7 @@ import HomeScreen from '../screens/HomeScreen';
 import LoginScreen from '../screens/LoginScreen';
 import RegisterScreen from 'screens/RegisterScreen';
 import ApiTestScreen from '../screens/ApiTestScreen';
+import StationScreen from 'screens/StationScreen';
 
 // Định nghĩa các kiểu dữ liệu cho các tham số route
 export type RootStackParamList = {
@@ -12,6 +13,7 @@ export type RootStackParamList = {
   Register: undefined;
   Home: undefined;
   ApiTest: undefined;
+  Stations: undefined;
   // Thêm các màn hình khác ở đây khi cần
 };
 
@@ -33,6 +35,21 @@ const AppNavigator: React.FC = () => {
         <Stack.Screen 
           name="Home" 
           component={HomeScreen} 
+          options={{ 
+            headerShown: true,
+            title: 'Shrimpvet App',
+            headerStyle: {
+              backgroundColor: '#0047ab',
+            },
+            headerTintColor: '#fff',
+            headerTitleStyle: {
+              fontWeight: 'bold',
+            },
+          }} 
+        />
+        <Stack.Screen 
+          name="Stations" 
+          component={StationScreen} 
           options={{ 
             headerShown: true,
             title: 'Shrimpvet App',

@@ -99,6 +99,26 @@ export const addUser=async(userData:{
   }
 };
 
+export const getStations = async () => {
+  try {
+    const response = await axios.get(`${API_URL}?action=list_stations`);
+    return response.data;
+  } catch (error) {
+    console.error('Fetch stations error:', error);
+    throw error;
+  }
+};
+
+export const getLatestData = async (stationId: number) => {
+  try {
+    const response = await axios.get(`${API_URL}?action=latest_data&station_id=${stationId}`);
+    return response.data;
+  } catch (error) {
+    console.error('Fetch latest data error:', error);
+    throw error;
+  }
+};
+
 // Get user by ID
 export const getUserById = async (id: number) => {
   try {
@@ -110,4 +130,4 @@ export const getUserById = async (id: number) => {
   }
 };
 
-export default { login, testConnection, getUsers, getUserById, testMySQLLogin };
+export default { login, testConnection, getUsers, addUser, getStations, getLatestData, getUserById, testMySQLLogin };

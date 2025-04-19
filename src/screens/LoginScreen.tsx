@@ -68,7 +68,7 @@ const LoginScreen: React.FC = ({ navigation }: any) => {
       if (response && response.user) {
         Alert.alert('Success', 'Login successful');
         if (navigation) {
-          navigation.navigate('Home');
+          navigation.navigate('Stations');
         }
       }
     } catch (error: any) {
