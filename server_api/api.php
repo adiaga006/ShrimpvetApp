@@ -109,15 +109,8 @@ switch ($action) {
         }
 
         try {
-            $stmt = $pdo->prepare("INSERT INTO user_infor (username, password, email, fullname, role) VALUES (:username, :password, :email, :fullname, :role)");
-            $stmt->execute([
-                'username' => $username,
-                'password' => $password, // Lưu ý: Cần mã hóa mật khẩu trước khi lưu
-                'email' => $email,
-                'fullname' => $fullname,
-                'role' => $role
-            ]);
-
+            $stmt = $pdo->prepare("INSERT INTO user_infor (username, password, email, fullname, role) VALUES (?,?,?,?,?)");
+            $stmt->execute([$username,$password,$email,$fullname,$role]);//Password hasn't been hashed
             echo json_encode([
                 'success' => true,
                 'message' => 'User added successfully'

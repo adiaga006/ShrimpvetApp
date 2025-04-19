@@ -125,6 +125,61 @@ app.post('/api/login', (req, res) => {
   });
 });
 
+// Register route
+app.post('/api/register', (req, res) => {
+  const { username, password, email, fullname, role } = req.body;
+  
+  if (!username || !password) {
+    return res.status(400).json({ error: 'Username and password are required' });
+  }
+  
+  const sql = 'INSERT INTO user_infor (username, password, email, fullname, role) VALUES (?,?,?,?,?)';
+  
+  db.query(sql, [username, password, email, fullname, role], (err, results) => {
+    if (err) {
+      console.error('Register error:', err);
+      return res.status(500).json({ error: 'Database error' });
+    }
+    
+    res.json({ 
+      message: 'Register successful', 
+      user: {
+        username,
+        password,
+        email,
+        fullname,
+        role
+      }
+    });
+  });
+});
+
+//Station route
+app.get('/api/stations', (req, res) => {
+  const sql = 'SELECT * FROM stations';
+  
+  db.query(sql, (err, results) => {
+    if (err) {
+      console.error('Error fetching stations:', err);
+      return res.status(500).json({ error: 'Database error' });
+    }
+    res.json(results);
+  });
+});
+
+//Latest data route
+app.get('/api/users', (req, res) => {
+  const [station_id]=req.body;
+  const sql = 'SELECT * FROM weather_data where station_id= ? ORDER BY timestamp DESC LIMIT 1';
+  db.query(sql,[station_id], (err, results) => {
+    if (err) {
+      console.error('Error fetching users:', err);
+      return res.status(500).json({ error: 'Database error' });
+    }
+    res.json(results);
+  });
+});
+
 // Start server
 app.listen(PORT, () => {
   console.log(`Server running on port ${PORT}`);
